@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { convertTemperature } from '../utils/temperature';
+import { TemperatureConverter, TemperatureResult } from '../utils/temperature';
 
 /**
  * @swagger
@@ -89,7 +89,7 @@ export function convertHandler(req: Request, res: Response) {
           error: 'Invalid celsius value. Must be a number.'
         });
       }
-      const result = convertTemperature(value, 'celsius');
+      const result = TemperatureConverter.convertTemperature(value, 'celsius');
       return res.json({
         input: {
           celsius: value
@@ -105,7 +105,7 @@ export function convertHandler(req: Request, res: Response) {
           error: 'Invalid fahrenheit value. Must be a number.'
         });
       }
-      const result = convertTemperature(value, 'fahrenheit');
+      const result = TemperatureConverter.convertTemperature(value, 'fahrenheit');
       return res.json({
         input: {
           fahrenheit: value
@@ -121,7 +121,7 @@ export function convertHandler(req: Request, res: Response) {
           error: 'Invalid kelvin value. Must be a number.'
         });
       }
-      const result = convertTemperature(value, 'kelvin');
+      const result = TemperatureConverter.convertTemperature(value, 'kelvin');
       return res.json({
         input: {
           kelvin: value
