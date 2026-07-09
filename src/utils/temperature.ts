@@ -87,6 +87,14 @@ export function convertTemperature(
       throw new Error(`Unknown temperature unit: ${fromUnit}`);
   }
 
+  // Validate temperature is not below absolute zero (0 K)
+  if (kelvin < 0) {
+    throw new Error(
+      `Temperature below absolute zero (0 K). ` +
+      `Minimum allowed: ${fromUnit === 'kelvin' ? '0 K' : fromUnit === 'celsius' ? '-273.15°C' : '-459.67°F'}`
+    );
+  }
+
   // Round to 2 decimal places for cleaner output
   return {
     celsius: Math.round(celsius * 100) / 100,

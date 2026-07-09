@@ -141,6 +141,11 @@ export function convertHandler(req: Request, res: Response) {
     });
   } catch (error) {
     console.error('Conversion error:', error);
+    if (error instanceof Error && error.message.includes('below absolute zero')) {
+      return res.status(400).json({
+        error: error.message
+      });
+    }
     return res.status(500).json({
       error: 'Internal server error during temperature conversion'
     });

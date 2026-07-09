@@ -192,4 +192,83 @@ describe('Convert Route Handler', () => {
       consoleSpy.mockRestore();
     });
   });
+
+  describe('Absolute zero validation', () => {
+    it('should return 400 for kelvin below absolute zero', () => {
+      const mockReq = createMockRequest({ kelvin: '-1' });
+      convertHandler(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: expect.stringContaining('below absolute zero'),
+      });
+    });
+
+    it('should return 400 for celsius below absolute zero (-273.16°C)', () => {
+      const mockReq = createMockRequest({ celsius: '-274' });
+      convertHandler(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: expect.stringContaining('below absolute zero'),
+      });
+    });
+
+    it('should return 400 for fahrenheit below absolute zero (-459.68°F)', () => {
+      const mockReq = createMockRequest({ fahrenheit: '-460' });
+      convertHandler(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: expect.stringContaining('below absolute zero'),
+      });
+    });
+
+    it('should accept absolute zero (0 K)', () => {
+      const mockReq = createMockRequest({ kelvin: '0' });
+      convertHandler(mockReq, mockRes);
+
+      expect(mockRes.status).not.toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        input: {
+          kelvin: 0,
+        },
+        result: expect.objectContaining({
+          kelvin: 0,
+          celsius: -273.15,
+          fahrenheit: expect.any(Number),
+        }),
+      });
+    });
+
+    it('should accept absolute zero in celsius (-273.15°C)', () => {
+      const mockReq = createMockRequest({ celsius: '-273.15' });
+      convertHandler(mockReq, mockRes);
+
+      expect(mockRes.status).not.toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        input: {
+          celsius: -273.15,
+        },
+        result: expect.objectContaining({
+          kelvin: 0,
+        }),
+      });
+    });
+
+    it('should accept absolute zero in fahrenheit (-459.67°F)', () => {
+      const mockReq = createMockRequest({ fahrenheit: '-459.67' });
+      convertHandler(mockReq, mockRes);
+
+      expect(mockRes.status).not.toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        input: {
+          fahrenheit: -459.67,
+        },
+        result: expect.objectContaining({
+          kelvin: 0,
+        }),
+      });
+    });
+  });
 });

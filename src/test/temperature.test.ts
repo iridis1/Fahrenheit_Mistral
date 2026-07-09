@@ -135,5 +135,44 @@ describe('Temperature Conversion Utilities', () => {
         convertTemperature(100, 'rankine' as any);
       }).toThrow('Unknown temperature unit: rankine');
     });
+
+    it('should accept absolute zero (0 K)', () => {
+      const result = convertTemperature(0, 'kelvin');
+      expect(result.kelvin).toBe(0);
+      expect(result.celsius).toBe(-273.15);
+      expect(result.fahrenheit).toBeCloseTo(-459.67);
+    });
+
+    it('should accept absolute zero in celsius (-273.15°C)', () => {
+      const result = convertTemperature(-273.15, 'celsius');
+      expect(result.kelvin).toBe(0);
+      expect(result.celsius).toBe(-273.15);
+      expect(result.fahrenheit).toBeCloseTo(-459.67);
+    });
+
+    it('should accept absolute zero in fahrenheit (-459.67°F)', () => {
+      const result = convertTemperature(-459.67, 'fahrenheit');
+      expect(result.kelvin).toBe(0);
+      expect(result.celsius).toBeCloseTo(-273.15);
+      expect(result.fahrenheit).toBeCloseTo(-459.67);
+    });
+
+    it('should throw error for temperature below absolute zero (negative Kelvin)', () => {
+      expect(() => {
+        convertTemperature(-1, 'kelvin');
+      }).toThrow('Temperature below absolute zero (0 K)');
+    });
+
+    it('should throw error for celsius below absolute zero (-273.16°C)', () => {
+      expect(() => {
+        convertTemperature(-273.16, 'celsius');
+      }).toThrow('Temperature below absolute zero (0 K)');
+    });
+
+    it('should throw error for fahrenheit below absolute zero (-459.68°F)', () => {
+      expect(() => {
+        convertTemperature(-459.68, 'fahrenheit');
+      }).toThrow('Temperature below absolute zero (0 K)');
+    });
   });
 });
