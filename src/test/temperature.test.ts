@@ -6,16 +6,13 @@ describe('Temperature Conversion Utilities', () => {
       expect(TemperatureConverter.celsiusToFahrenheit(0)).toBe(32);
     });
 
-    it('should convert 100\u00B0C to 212\u00B0F (boiling point of water)', () => {
-      expect(TemperatureConverter.celsiusToFahrenheit(100)).toBe(212);
-    });
-
-    it('should convert -40\u00B0C to -40\u00B0F (where both scales meet)', () => {
-      expect(TemperatureConverter.celsiusToFahrenheit(-40)).toBe(-40);
-    });
 
     it('should convert 37\u00B0C to 98.6\u00B0F (human body temperature)', () => {
       expect(TemperatureConverter.celsiusToFahrenheit(37)).toBeCloseTo(98.6);
+    });
+
+    it('should convert -5.5\u00B0C to 22.1\u00B0F (negative decimal input)', () => {
+      expect(TemperatureConverter.celsiusToFahrenheit(-5.5)).toBeCloseTo(22.1);
     });
   });
 
@@ -38,12 +35,12 @@ describe('Temperature Conversion Utilities', () => {
       expect(TemperatureConverter.fahrenheitToCelsius(32)).toBe(0);
     });
 
-    it('should convert 212\u00B0F to 100\u00B0C', () => {
-      expect(TemperatureConverter.fahrenheitToCelsius(212)).toBe(100);
+    it('should convert -4\u00B0F to -20\u00B0C (negative input)', () => {
+      expect(TemperatureConverter.fahrenheitToCelsius(-4)).toBe(-20);
     });
 
-    it('should convert -40\u00B0F to -40\u00B0C', () => {
-      expect(TemperatureConverter.fahrenheitToCelsius(-40)).toBe(-40);
+    it('should convert 68.5\u00B0F to 20.28\u00B0C (decimal input)', () => {
+      expect(TemperatureConverter.fahrenheitToCelsius(68.5)).toBeCloseTo(20.28);
     });
   });
 
@@ -54,6 +51,10 @@ describe('Temperature Conversion Utilities', () => {
 
     it('should convert 212\u00B0F to 373.15K', () => {
       expect(TemperatureConverter.fahrenheitToKelvin(212)).toBeCloseTo(373.15);
+    });
+
+    it('should convert -40\u00B0F to 233.15K (negative input)', () => {
+      expect(TemperatureConverter.fahrenheitToKelvin(-40)).toBeCloseTo(233.15);
     });
   });
 
