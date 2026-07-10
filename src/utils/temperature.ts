@@ -13,12 +13,18 @@ export interface TemperatureResult {
  * Celsius, Fahrenheit, and Kelvin temperature units.
  */
 export class TemperatureConverter {
+  // Constants for temperature conversion
+  private static readonly ABSOLUTE_ZERO_KELVIN = 0;
+  private static readonly ABSOLUTE_ZERO_CELSIUS = -273.15;
+  private static readonly ABSOLUTE_ZERO_FAHRENHEIT = -459.67;
+  private static readonly KELVIN_OFFSET = -1 * this.ABSOLUTE_ZERO_CELSIUS;
+  private static readonly FAHRENHEIT_OFFSET = 32;
   /**
    * Convert Celsius to Fahrenheit
    * Formula: F = C * 9/5 + 32
    */
   public static celsiusToFahrenheit(celsius: number): number {
-    return (celsius * 9) / 5 + 32;
+    return (celsius * 9) / 5 + this.FAHRENHEIT_OFFSET;
   }
 
   /**
@@ -26,7 +32,7 @@ export class TemperatureConverter {
    * Formula: K = C + 273.15
    */
   public static celsiusToKelvin(celsius: number): number {
-    return celsius + 273.15;
+    return celsius + this.KELVIN_OFFSET;
   }
 
   /**
@@ -34,7 +40,7 @@ export class TemperatureConverter {
    * Formula: C = (F - 32) * 5/9
    */
   public static fahrenheitToCelsius(fahrenheit: number): number {
-    return ((fahrenheit - 32) * 5) / 9;
+    return ((fahrenheit - this.FAHRENHEIT_OFFSET) * 5) / 9;
   }
 
   /**
@@ -42,7 +48,7 @@ export class TemperatureConverter {
    * Formula: K = (F - 32) * 5/9 + 273.15
    */
   public static fahrenheitToKelvin(fahrenheit: number): number {
-    return ((fahrenheit - 32) * 5) / 9 + 273.15;
+    return ((fahrenheit - this.FAHRENHEIT_OFFSET) * 5) / 9 + this.KELVIN_OFFSET;
   }
 
   /**
@@ -50,7 +56,7 @@ export class TemperatureConverter {
    * Formula: C = K - 273.15
    */
   public static kelvinToCelsius(kelvin: number): number {
-    return kelvin - 273.15;
+    return kelvin - this.KELVIN_OFFSET;
   }
 
   /**
@@ -58,7 +64,7 @@ export class TemperatureConverter {
    * Formula: F = (K - 273.15) * 9/5 + 32
    */
   public static kelvinToFahrenheit(kelvin: number): number {
-    return ((kelvin - 273.15) * 9) / 5 + 32;
+    return ((kelvin - this.KELVIN_OFFSET) * 9) / 5 + this.FAHRENHEIT_OFFSET;
   }
 
   /**
@@ -94,10 +100,14 @@ export class TemperatureConverter {
     }
 
     // Validate temperature is not below absolute zero (0 K)
-    if (kelvin < 0) {
+    if (kelvin < this.ABSOLUTE_ZERO_KELVIN) {
+      const minValues = {
+        kelvin: '0 K',
+        celsius: `${this.ABSOLUTE_ZERO_CELSIUS}°C`,
+        fahrenheit: `${this.ABSOLUTE_ZERO_FAHRENHEIT}°F`,
+      };
       throw new Error(
-        `Temperature below absolute zero (0 K). ` +
-        `Minimum allowed: ${fromUnit === 'kelvin' ? '0 K' : fromUnit === 'celsius' ? '-273.15°C' : '-459.67°F'}`
+        `Temperature below absolute zero (0 K). Minimum allowed: ${minValues[fromUnit]}`
       );
     }
 
