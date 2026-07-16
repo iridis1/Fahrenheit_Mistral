@@ -81,6 +81,27 @@ export function convertHandler(req: Request, res: Response) {
   try {
     const { celsius, fahrenheit, kelvin } = req.query;
 
+    // Count how many parameters are provided
+    const providedParams = [celsius, fahrenheit, kelvin].filter(p => p !== undefined).length;
+    
+    // Validate that exactly one parameter is provided
+    if (providedParams === 0) {
+      return res.status(400).json({
+        error: 'Please provide exactly one temperature parameter: celsius, fahrenheit, or kelvin',
+        examples: [
+          '/convert?celsius=20',
+          '/convert?fahrenheit=300',
+          '/convert?kelvin=100'
+        ]
+      });
+    }
+    
+    if (providedParams > 1) {
+      return res.status(400).json({
+        error: 'Please provide exactly one temperature parameter. Multiple parameters are not allowed.'
+      });
+    }
+
     // Check which parameter is provided
     if (celsius !== undefined) {
       const value = parseFloat(celsius as string);
@@ -130,14 +151,9 @@ export function convertHandler(req: Request, res: Response) {
       });
     }
 
-    // No valid parameter provided
+    // This should never be reached due to the validation above, but included for safety
     return res.status(400).json({
-      error: 'Please provide one of the following query parameters: celsius, fahrenheit, or kelvin',
-      examples: [
-        '/convert?celsius=20',
-        '/convert?fahrenheit=300',
-        '/convert?kelvin=100'
-      ]
+      error: 'No valid temperature parameter provided'
     });
   } catch (error) {
     console.error('Conversion error:', error);
