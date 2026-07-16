@@ -19,6 +19,13 @@ export class TemperatureConverter {
   private static readonly ABSOLUTE_ZERO_FAHRENHEIT = -459.67;
   private static readonly KELVIN_OFFSET = -1 * this.ABSOLUTE_ZERO_CELSIUS;
   private static readonly FAHRENHEIT_OFFSET = 32;
+
+  /**
+   * Round a number to 2 decimal places
+   */
+  private static roundToTwoDecimals(value: number): number {
+    return Math.round(value * 100) / 100;
+  }
   /**
    * Convert Celsius to Fahrenheit
    * Formula: F = C * 9/5 + 32
@@ -113,9 +120,9 @@ export class TemperatureConverter {
 
     // Round to 2 decimal places for cleaner output
     return {
-      celsius: Math.round(celsius * 100) / 100,
-      fahrenheit: Math.round(fahrenheit * 100) / 100,
-      kelvin: Math.round(kelvin * 100) / 100,
+      celsius: this.roundToTwoDecimals(celsius),
+      fahrenheit: this.roundToTwoDecimals(fahrenheit),
+      kelvin: this.roundToTwoDecimals(kelvin),
     };
   }
 }
