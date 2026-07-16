@@ -179,6 +179,14 @@ describe('Temperature Conversion API', () => {
         expect(res.body).toHaveProperty('error');
         expect(res.body.error).toContain('Multiple parameters are not allowed');
       });
+
+      it('should return 400 for duplicate parameter key', async () => {
+        const res = await request(app).get('/convert?celsius=20&celsius=21');
+        
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toHaveProperty('error');
+        expect(res.body.error).toContain("Duplicate parameter 'celsius' is not allowed");
+      });
     });
   });
 

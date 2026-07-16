@@ -81,6 +81,15 @@ export function convertHandler(req: Request, res: Response) {
   try {
     const { celsius, fahrenheit, kelvin } = req.query;
 
+    // Check for array-valued parameters (duplicate keys like ?celsius=20&celsius=21)
+    const params = { celsius, fahrenheit, kelvin };
+    const arrayParam = Object.entries(params).find(([_, value]) => Array.isArray(value));
+    if (arrayParam) {
+      return res.status(400).json({
+        error: `Duplicate parameter '${arrayParam[0]}' is not allowed. Please provide each parameter only once.`
+      });
+    }
+
     // Count how many parameters are provided
     const providedParams = [celsius, fahrenheit, kelvin].filter(p => p !== undefined).length;
     

@@ -11,7 +11,7 @@ const createMockResponse = () => {
 };
 
 // Mock the Request object with query parameters
-const createMockRequest = (query: Record<string, string | number | boolean | undefined>): Request => {
+const createMockRequest = (query: Record<string, string | number | boolean | string[] | undefined>): Request => {
   return {
     query,
   } as unknown as Request;
@@ -218,6 +218,36 @@ describe('Convert Route Handler', () => {
       expect(mockRes.status).toHaveBeenCalledWith(400);
       expect(mockRes.json).toHaveBeenCalledWith({
         error: 'Please provide exactly one temperature parameter. Multiple parameters are not allowed.',
+      });
+    });
+
+    it('should return 400 for duplicate celsius parameter', () => {
+      const mockReq = createMockRequest({ celsius: ['20', '21'] });
+      convertHandler(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: "Duplicate parameter 'celsius' is not allowed. Please provide each parameter only once."
+      });
+    });
+
+    it('should return 400 for duplicate fahrenheit parameter', () => {
+      const mockReq = createMockRequest({ fahrenheit: ['32', '64'] });
+      convertHandler(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: "Duplicate parameter 'fahrenheit' is not allowed. Please provide each parameter only once."
+      });
+    });
+
+    it('should return 400 for duplicate kelvin parameter', () => {
+      const mockReq = createMockRequest({ kelvin: ['100', '200'] });
+      convertHandler(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: "Duplicate parameter 'kelvin' is not allowed. Please provide each parameter only once."
       });
     });
   });
