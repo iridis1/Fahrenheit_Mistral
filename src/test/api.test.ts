@@ -168,15 +168,16 @@ describe('Temperature Conversion API', () => {
         
         expect(res.statusCode).toBe(400);
         expect(res.body).toHaveProperty('error');
-        expect(res.body.error).toContain('Please provide one of the following query parameters');
+        expect(res.body.error).toContain('Please provide exactly one temperature parameter');
         expect(res.body).toHaveProperty('examples');
       });
 
       it('should return 400 for multiple parameters', async () => {
         const res = await request(app).get('/convert?celsius=20&fahrenheit=32');
         
-        expect(res.statusCode).toBe(200);
-        expect(res.body.input).toEqual({ celsius: 20 });
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toHaveProperty('error');
+        expect(res.body.error).toContain('Multiple parameters are not allowed');
       });
     });
   });

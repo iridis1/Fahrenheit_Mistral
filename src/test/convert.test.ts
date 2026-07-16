@@ -52,21 +52,6 @@ describe('Convert Route Handler', () => {
         error: 'Invalid celsius value. Must be a number.',
       });
     });
-
-    it('should return 400 for missing parameters', () => {
-      const mockReq = createMockRequest({});
-      convertHandler(mockReq, mockRes);
-
-      expect(mockRes.status).toHaveBeenCalledWith(400);
-      expect(mockRes.json).toHaveBeenCalledWith({
-        error: 'Please provide one of the following query parameters: celsius, fahrenheit, or kelvin',
-        examples: [
-          '/convert?celsius=20',
-          '/convert?fahrenheit=300',
-          '/convert?kelvin=100',
-        ],
-      });
-    });
   });
 
   describe('GET /convert with fahrenheit parameter', () => {
@@ -176,6 +161,63 @@ describe('Convert Route Handler', () => {
           fahrenheit: 32,
           kelvin: 273.15,
         }),
+      });
+    });
+  });
+
+  describe('Parameter cardinality validation', () => {
+    it('should return 400 for no temperature parameters', () => {
+      const mockReq = createMockRequest({});
+      convertHandler(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Please provide exactly one temperature parameter: celsius, fahrenheit, or kelvin',
+        examples: [
+          '/convert?celsius=20',
+          '/convert?fahrenheit=300',
+          '/convert?kelvin=100',
+        ],
+      });
+    });
+
+    it('should return 400 for multiple temperature parameters (celsius and fahrenheit)', () => {
+      const mockReq = createMockRequest({ celsius: '20', fahrenheit: '32' });
+      convertHandler(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Please provide exactly one temperature parameter. Multiple parameters are not allowed.',
+      });
+    });
+
+    it('should return 400 for multiple temperature parameters (celsius and kelvin)', () => {
+      const mockReq = createMockRequest({ celsius: '20', kelvin: '100' });
+      convertHandler(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Please provide exactly one temperature parameter. Multiple parameters are not allowed.',
+      });
+    });
+
+    it('should return 400 for multiple temperature parameters (fahrenheit and kelvin)', () => {
+      const mockReq = createMockRequest({ fahrenheit: '32', kelvin: '100' });
+      convertHandler(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Please provide exactly one temperature parameter. Multiple parameters are not allowed.',
+      });
+    });
+
+    it('should return 400 for all three temperature parameters', () => {
+      const mockReq = createMockRequest({ celsius: '20', fahrenheit: '32', kelvin: '100' });
+      convertHandler(mockReq, mockRes);
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: 'Please provide exactly one temperature parameter. Multiple parameters are not allowed.',
       });
     });
   });
