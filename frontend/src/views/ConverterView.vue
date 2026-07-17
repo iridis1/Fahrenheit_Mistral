@@ -1,9 +1,11 @@
 ﻿<template>
   <div class="converter-container">
     <h1>Temperatuur Converter</h1>
-    
+
+    <label for="temperature-input" class="input-label">Temperatuur:</label>
     <div class="input-group">
       <input
+        id="temperature-input"
         type="number"
         v-model.number="temperature"
         placeholder="Temperatuur"
@@ -75,6 +77,12 @@ const convert = async () => {
   margin: 2rem auto;
   padding: 2rem;
   font-family: Arial, sans-serif;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
 }
 
 .input-group {
