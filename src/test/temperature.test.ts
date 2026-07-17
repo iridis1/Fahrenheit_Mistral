@@ -86,6 +86,21 @@ describe('Temperature Conversion Utilities', () => {
     });
   });
 
+  describe('inverted conversions', () => {
+    const temperature = Math.random() * 500 + 1; // Random temperature between 1 and 400
+
+    it('should convert from celsius to kelvin and back again with same output', () => {
+      expect(TemperatureConverter.celsiusToKelvin(TemperatureConverter.kelvinToCelsius(temperature))).toBeCloseTo(temperature);
+    });
+    it('should convert from kelvin to fahrenheit and back again with same output', () => {
+      expect(TemperatureConverter.kelvinToFahrenheit(TemperatureConverter.fahrenheitToKelvin(temperature))).toBeCloseTo(temperature);
+    });
+    it('should convert from fahrenheit to kelvin and back again with same output', () => {
+      expect(TemperatureConverter.fahrenheitToCelsius(TemperatureConverter.celsiusToFahrenheit(temperature))).toBeCloseTo(temperature);
+    });
+  });
+
+
   describe('convertTemperature', () => {
     it('should convert from celsius to all units', () => {
       const result = TemperatureConverter.convertTemperature(0, 'celsius');
