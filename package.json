@@ -12,7 +12,7 @@
     "test:coverage": "jest --coverage",
     "start:backend": "node dist/app.js",
     "start:frontend": "cd frontend && npm run dev",
-    "dev:full": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+    "dev:full": "concurrently \"npm run dev\" \"npm run start:frontend\""
   },
   "keywords": [
     "temperature",
