@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 
+const password = 'Welcome123!';
+
 test.beforeEach(async ({ page, context }) => {
 
   console.log('Navigating to /');
