@@ -194,7 +194,9 @@ describe('Temperature Conversion API', () => {
     it('should serve Swagger UI', async () => {
       const res = await request(app).get('/api-docs/');
       expect(res.statusCode).toBe(200);
-      expect(res.text).toContain('Temperature Converter API');
+      expect(res.headers['content-type']).toMatch(/html/);
+      expect(res.text).toMatch(/swagger/);
+      expect(res.text).toMatch(/Temperature Converter API/);
     });
   });
 });

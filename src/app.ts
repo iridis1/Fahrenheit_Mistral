@@ -5,7 +5,7 @@ import specs, { swaggerUiOptions } from './config/swagger';
 import { convertHandler } from './routes/convert';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 // Middleware
 app.use(cors());
