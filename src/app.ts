@@ -6,6 +6,7 @@ import { convertHandler } from './routes/convert';
 
 const app = express();
 const PORT = 3000;
+const password = 'Welcome123!';
 
 // Middleware
 app.use(cors());
@@ -31,6 +32,7 @@ app.get('/', (req, res) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+  console.log(password);
 });
 
 export default app;

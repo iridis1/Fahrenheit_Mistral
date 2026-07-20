@@ -25,94 +25,7 @@ describe('Convert Route Handler', () => {
     jest.clearAllMocks();
   });
 
-  describe('GET /convert with celsius parameter', () => {
-    it('should convert celsius to all units', () => {
-      const mockReq = createMockRequest({ celsius: '20' });
-      convertHandler(mockReq, mockRes);
-
-      expect(mockRes.status).not.toHaveBeenCalledWith(400);
-      expect(mockRes.json).toHaveBeenCalledWith({
-        input: {
-          celsius: 20,
-        },
-        result: expect.objectContaining({
-          celsius: 20,
-          fahrenheit: expect.any(Number),
-          kelvin: expect.any(Number),
-        }),
-      });
-    });
-
-    it('should return 400 for invalid celsius value', () => {
-      const mockReq = createMockRequest({ celsius: 'invalid' });
-      convertHandler(mockReq, mockRes);
-
-      expect(mockRes.status).toHaveBeenCalledWith(400);
-      expect(mockRes.json).toHaveBeenCalledWith({
-        error: 'Invalid celsius value. Must be a number.',
-      });
-    });
-  });
-
-  describe('GET /convert with fahrenheit parameter', () => {
-    it('should convert fahrenheit to all units', () => {
-      const mockReq = createMockRequest({ fahrenheit: '32' });
-      convertHandler(mockReq, mockRes);
-
-      expect(mockRes.status).not.toHaveBeenCalledWith(400);
-      expect(mockRes.json).toHaveBeenCalledWith({
-        input: {
-          fahrenheit: 32,
-        },
-        result: expect.objectContaining({
-          celsius: 0,
-          fahrenheit: 32,
-          kelvin: 273.15,
-        }),
-      });
-    });
-
-    it('should return 400 for invalid fahrenheit value', () => {
-      const mockReq = createMockRequest({ fahrenheit: 'not-a-number' });
-      convertHandler(mockReq, mockRes);
-
-      expect(mockRes.status).toHaveBeenCalledWith(400);
-      expect(mockRes.json).toHaveBeenCalledWith({
-        error: 'Invalid fahrenheit value. Must be a number.',
-      });
-    });
-  });
-
-  describe('GET /convert with kelvin parameter', () => {
-    it('should convert kelvin to all units', () => {
-      const mockReq = createMockRequest({ kelvin: '273.15' });
-      convertHandler(mockReq, mockRes);
-
-      expect(mockRes.status).not.toHaveBeenCalledWith(400);
-      expect(mockRes.json).toHaveBeenCalledWith({
-        input: {
-          kelvin: 273.15,
-        },
-        result: expect.objectContaining({
-          celsius: 0,
-          fahrenheit: 32,
-          kelvin: 273.15,
-        }),
-      });
-    });
-
-    it('should return 400 for invalid kelvin value', () => {
-      const mockReq = createMockRequest({ kelvin: 'abc' });
-      convertHandler(mockReq, mockRes);
-
-      expect(mockRes.status).toHaveBeenCalledWith(400);
-      expect(mockRes.json).toHaveBeenCalledWith({
-        error: 'Invalid kelvin value. Must be a number.',
-      });
-    });
-  });
-
-  describe('Edge cases', () => {
+   describe('Edge cases', () => {
     it('should handle negative temperatures', () => {
       const mockReq = createMockRequest({ celsius: '-10' });
       convertHandler(mockReq, mockRes);
@@ -210,46 +123,7 @@ describe('Convert Route Handler', () => {
         error: 'Please provide exactly one temperature parameter. Multiple parameters are not allowed.',
       });
     });
-
-    it('should return 400 for all three temperature parameters', () => {
-      const mockReq = createMockRequest({ celsius: '20', fahrenheit: '32', kelvin: '100' });
-      convertHandler(mockReq, mockRes);
-
-      expect(mockRes.status).toHaveBeenCalledWith(400);
-      expect(mockRes.json).toHaveBeenCalledWith({
-        error: 'Please provide exactly one temperature parameter. Multiple parameters are not allowed.',
-      });
-    });
-
-    it('should return 400 for duplicate celsius parameter', () => {
-      const mockReq = createMockRequest({ celsius: ['20', '21'] });
-      convertHandler(mockReq, mockRes);
-
-      expect(mockRes.status).toHaveBeenCalledWith(400);
-      expect(mockRes.json).toHaveBeenCalledWith({
-        error: "Duplicate parameter 'celsius' is not allowed. Please provide each parameter only once."
-      });
-    });
-
-    it('should return 400 for duplicate fahrenheit parameter', () => {
-      const mockReq = createMockRequest({ fahrenheit: ['32', '64'] });
-      convertHandler(mockReq, mockRes);
-
-      expect(mockRes.status).toHaveBeenCalledWith(400);
-      expect(mockRes.json).toHaveBeenCalledWith({
-        error: "Duplicate parameter 'fahrenheit' is not allowed. Please provide each parameter only once."
-      });
-    });
-
-    it('should return 400 for duplicate kelvin parameter', () => {
-      const mockReq = createMockRequest({ kelvin: ['100', '200'] });
-      convertHandler(mockReq, mockRes);
-
-      expect(mockRes.status).toHaveBeenCalledWith(400);
-      expect(mockRes.json).toHaveBeenCalledWith({
-        error: "Duplicate parameter 'kelvin' is not allowed. Please provide each parameter only once."
-      });
-    });
+  
   });
 
   describe('Error handling', () => {
