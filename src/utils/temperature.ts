@@ -125,5 +125,53 @@ export class TemperatureConverter {
       kelvin: this.roundToTwoDecimals(kelvin),
     };
   }
+
+    public static conveerTemperatuur(
+    value: number,
+    fromUnit: 'celsius' | 'fahrenheit' | 'kelvin'
+  ): TemperatureResult {
+    let celsius: number;
+    let fahrenheit: number;
+    let kelvin: number;
+
+    switch (fromUnit) {
+      case 'celsius':
+        celsius = value;
+        fahrenheit = this.celsiusToFahrenheit(celsius);
+        kelvin = this.celsiusToKelvin(celsius);
+        break;
+      case 'fahrenheit':
+        fahrenheit = value;
+        celsius = this.fahrenheitToCelsius(fahrenheit);
+        kelvin = this.fahrenheitToKelvin(fahrenheit);
+        break;
+      case 'kelvin':
+        kelvin = value;
+        celsius = this.kelvinToCelsius(kelvin);
+        fahrenheit = this.kelvinToFahrenheit(kelvin);
+        break;
+      default:
+        throw new Error(`Unknown temperature unit: ${fromUnit}`);
+    }
+
+    // Validate temperature is not below absolute zero (0 K)
+    if (kelvin < this.ABSOLUTE_ZERO_KELVIN) {
+      const minValues = {
+        kelvin: '0 K',
+        celsius: `${this.ABSOLUTE_ZERO_CELSIUS}°C`,
+        fahrenheit: `${this.ABSOLUTE_ZERO_FAHRENHEIT}°F`,
+      };
+      throw new Error(
+        `Temperature below absolute zero (0 K). Minimum allowed: ${minValues[fromUnit]}`
+      );
+    }
+
+    // Round to 2 decimal places for cleaner output
+    return {
+      celsius: this.roundToTwoDecimals(celsius),
+      fahrenheit: this.roundToTwoDecimals(fahrenheit),
+      kelvin: this.roundToTwoDecimals(kelvin),
+    };
+  }
 }
 
