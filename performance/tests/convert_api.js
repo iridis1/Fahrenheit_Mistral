@@ -11,6 +11,37 @@ const requestCounter = new Counter('requests_count');
 // Use configuration from k6.config.js
 const { baseUrl, convertEndpoint, thresholds, testCases, scenarios } = config;
 
+const configuredScenarios = {
+  smoke_test: {
+    executor: scenarios.smoke.executor,
+    vus: scenarios.smoke.vus,
+    duration: scenarios.smoke.duration,
+    tags: { test_type: 'smoke' },
+  },
+  load_test: {
+    executor: scenarios.load.executor,
+    stages: scenarios.load.stages,
+    tags: { test_type: 'load' },
+  },
+  stress_test: {
+    executor: scenarios.stress.executor,
+    stages: scenarios.stress.stages,
+    tags: { test_type: 'stress' },
+  },
+  spike_test: {
+    executor: scenarios.spike.executor,
+    stages: scenarios.spike.stages,
+    tags: { test_type: 'spike' },
+  },
+};
+
+const selectedScenario = __ENV.SCENARIO;
+const selectedScenarios = Object.fromEntries(
+  Object.entries(configuredScenarios).filter(
+    ([name]) => !selectedScenario || name === selectedScenario,
+  ),
+);
+
 // Build full endpoint URL
 const fullUrl = `${baseUrl}${convertEndpoint}`;
 
@@ -66,36 +97,7 @@ export const options = {
   },
   
   // Scenarios from configuration
-  scenarios: {
-    // Scenario 1: Smoke Test
-    smoke_test: {
-      executor: scenarios.smoke.executor,
-      vus: scenarios.smoke.vus,
-      duration: scenarios.smoke.duration,
-      tags: { test_type: 'smoke' },
-    },
-    
-    // Scenario 2: Load Test
-    load_test: {
-      executor: scenarios.load.executor,
-      stages: scenarios.load.stages,
-      tags: { test_type: 'load' },
-    },
-    
-    // Scenario 3: Stress Test
-    stress_test: {
-      executor: scenarios.stress.executor,
-      stages: scenarios.stress.stages,
-      tags: { test_type: 'stress' },
-    },
-    
-    // Scenario 4: Spike Test
-    spike_test: {
-      executor: scenarios.spike.executor,
-      stages: scenarios.spike.stages,
-      tags: { test_type: 'spike' },
-    },
-  },
+  scenarios: selectedScenarios,
 };
 
 // Combine valid and invalid test cases from configuration

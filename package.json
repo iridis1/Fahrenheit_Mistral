@@ -14,10 +14,10 @@
     "start:frontend": "cd frontend && npm run dev",
     "dev:full": "concurrently \"npm run dev\" \"npm run start:frontend\"",
     "test:performance": "k6 run performance/tests/convert_api.js",
-    "test:performance:smoke": "k6 run --scenario smoke_test performance/tests/convert_api.js",
-    "test:performance:load": "k6 run --scenario load_test performance/tests/convert_api.js",
-    "test:performance:stress": "k6 run --scenario stress_test performance/tests/convert_api.js",
-    "test:performance:spike": "k6 run --scenario spike_test performance/tests/convert_api.js"
+    "test:performance:smoke": "k6 run -e SCENARIO=smoke_test performance/tests/convert_api.js",
+    "test:performance:load": "k6 run -e SCENARIO=load_test performance/tests/convert_api.js",
+    "test:performance:stress": "k6 run -e SCENARIO=stress_test performance/tests/convert_api.js",
+    "test:performance:spike": "k6 run -e SCENARIO=spike_test performance/tests/convert_api.js"
   },
   "keywords": [
     "temperature",
