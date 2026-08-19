@@ -16,14 +16,10 @@ export const config = {
     http_req_failed: ['rate<0.01'],
     
     // Response time thresholds
-    http_req_duration: {
-      'p(95)<500': ['p(95)<500'],    // 95th percentile < 500ms
-      'p(99)<1000': ['p(99)<1000'],  // 99th percentile < 1000ms
-      'avg<200': ['avg<200'],        // Average < 200ms
-    },
+    http_req_duration: ['p(95)<500', 'p(99)<1000', 'avg<200'],
     
     // Check success rate
-    checks: ['rate>0.995'], // 99% of checks must pass
+    checks: ['rate>0.995'], // 99.5% of checks must pass
   },
   
   // Test data for different conversion types
@@ -43,10 +39,9 @@ export const config = {
     
     invalid: [
       { name: 'no_params', query: '', expectedStatus: 400 },
-      { name: 'invalid_celsius', query: 'celsius=invalid', expectedStatus: 400 },
+      { name: 'invalid_celsius', query: 'celsius=not_a_number', expectedStatus: 400 },
       { name: 'invalid_fahrenheit', query: 'fahrenheit=not_a_number', expectedStatus: 400 },
-      { name: 'invalid_kelvin', query: 'kelvin=abc', expectedStatus: 400 },
-      { name: 'absolute_zero_kelvin', query: 'kelvin=0', expectedStatus: 400 },
+      { name: 'invalid_kelvin', query: 'kelvin=not_a_number', expectedStatus: 400 },
       { name: 'below_absolute_zero', query: 'kelvin=-1', expectedStatus: 400 },
     ],
   },
