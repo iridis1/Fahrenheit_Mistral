@@ -12,7 +12,7 @@ export async function convertTemperature(
 ): Promise<TemperatureResult> {
   try {
     const response = await axios.get<{ result: TemperatureResult }>(
-      `/api/convert?${fromUnit}=${value}`
+      `/api/convert?${fromUnit}=${value}&api-key=378Gh85336hD430622h4S`
     );
     return response.data.result;
   } catch (err) {

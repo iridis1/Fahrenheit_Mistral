@@ -125,7 +125,25 @@ temperature-converter/
 | `npm run build` | Compile TypeScript to JavaScript |
 | `npm start` | Run the production server |
 | `npm run dev` | Run the development server with hot reload |
-| `npm test` | Run tests (not configured) |
+| `npm test` | Run unit tests |
+| `npm run test:performance` | Run all performance tests (requires K6) |
+| `npm run test:performance:smoke` | Run smoke test |
+| `npm run test:performance:load` | Run load test |
+| `npm run test:performance:stress` | Run stress test |
+| `npm run test:performance:spike` | Run spike test |
+
+## Performance Testing
+
+This project includes performance tests using [K6](https://k6.io/), a modern load testing tool. The tests evaluate the API under various load conditions:
+
+- **Smoke Test**: Basic functionality check with 1 VU for 10 seconds
+- **Load Test**: Ramps to 50 VUs, sustained for 20 seconds, then ramps down
+- **Stress Test**: Ramps to 200 VUs, sustained for 2 minutes to find breaking point
+- **Spike Test**: Sudden burst from 10 to 200 VUs to test resilience
+
+**Prerequisite:** Install [K6](https://k6.io/docs/get-started/installation/) before running performance tests.
+
+See `performance/README.md` for detailed documentation.
 
 ## Dependencies
 
