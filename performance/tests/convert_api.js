@@ -11,6 +11,17 @@ const requestCounter = new Counter('requests_count');
 // Use configuration from k6.config.js
 const { baseUrl, convertEndpoint, thresholds, testCases, scenarios } = config;
 
+function randomIntBetween(min, max) {
+  const lower = Math.ceil(min);
+  const upper = Math.floor(max);
+
+  if (upper < lower) {
+    throw new Error(`Invalid random range: ${min}..${max}`);
+  }
+
+  return Math.floor(Math.random() * (upper - lower + 1)) + lower;
+}
+
 const configuredScenarios = {
   smoke_test: {
     executor: scenarios.smoke.executor,
@@ -105,12 +116,14 @@ const allTestCases = [...testCases.valid, ...testCases.invalid];
 
 // Main test function - runs for each VU iteration
 export default function () {
-  // Randomly select a test case from the combined pool
-  const testCase = allTestCases[Math.floor(Math.random() * allTestCases.length)];
+  // Select a test case from the combined pool
+  const randomIndex = randomIntBetween(0, allTestCases.length - 1);
+  const testCase = allTestCases[randomIndex];
   
   // Make the request
   const res = makeRequest(testCase);
   
-  // Add a small delay between requests to simulate think time
-  sleep(0.1 + Math.random() * 0.2); // 100-300ms random delay
+  // Add a random delay between requests to simulate think time (100-300ms)
+  const delayMs = randomIntBetween(100, 300);
+  sleep(delayMs / 1000);
 }
