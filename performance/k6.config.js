@@ -23,7 +23,7 @@ export const config = {
     },
     
     // Check success rate
-    checks: ['rate>0.99'], // 99% of checks must pass
+    checks: ['rate>0.995'], // 99% of checks must pass
   },
   
   // Test data for different conversion types
