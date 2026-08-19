@@ -19,7 +19,7 @@ function randomIntBetween(min, max) {
     throw new Error(`Invalid random range: ${min}..${max}`);
   }
 
-  return Math.floor(Math.random() * (upper - lower + 1)) + lower;
+  return Math.floor(Math.random() * (upper - lower + 1)) + lower; // NOSONAR (it complains about Math.random() being insecure, but it's fine for performance testing)
 }
 
 const configuredScenarios = {
@@ -115,13 +115,12 @@ export const options = {
 const allTestCases = [...testCases.valid, ...testCases.invalid];
 
 // Main test function - runs for each VU iteration
-export default function () {
+export default function main() {
   // Select a test case from the combined pool
   const randomIndex = randomIntBetween(0, allTestCases.length - 1);
   const testCase = allTestCases[randomIndex];
   
-  // Make the request
-  const res = makeRequest(testCase);
+  makeRequest(testCase);
   
   // Add a random delay between requests to simulate think time (100-300ms)
   const delayMs = randomIntBetween(100, 300);
